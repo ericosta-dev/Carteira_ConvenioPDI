@@ -19,8 +19,8 @@ for i=1:altura_metade
   end
 end;
 
-  figure('Name','Imagem cortada');
-  imshow(im_cort)
+  %figure('Name','Imagem cortada');
+  %imshow(im_cort)
 
 soma = sum(sum (im_cort))/(size(im_cort,1)*size(im_cort,2));
 
@@ -45,8 +45,41 @@ for i=1:size(im_final,1)
   end
 end;
 
-
 figure('Name','Imagem final');
 imshow(im_final);
 
+%Fase de segmentação%
 
+##for i=1:size(im_final,1)
+##  for j=1:size(im_final,2) 
+##    if (((im_final(i,j,1) > 155) && (im_final(i,j,1) < 165)) 
+##        && ((im_final(i,j,2) > 170) && (im_final(i,j,2) < 185)) 
+##        && ((im_final(i,j,3) > 165) && (im_final(i,j,3) < 170))) %encontrar o branco
+##      linha = im_final(i);
+##    end
+##  end
+##end;
+
+linha     = round(size(im_final)*0.35);
+linha_fim = linha + 250;
+
+im_seg_fin = im_final(linha:linha_fim,1:size(im_final,2),:)
+
+figure('Name','Imagem segmentada final');
+imshow(im_seg_fin);
+
+%transformando a imagem para b&w
+img_gray = rgb2gray(im_seg_fin);
+
+%limiarizando
+LIMIAR = 100;
+B = img_gray;
+B(B<=LIMIAR) = 0;
+B(B>LIMIAR) = 255;
+figure, imshow(B);
+
+num_cart = B(1:115,1:1000,:);
+nome_cart = B(200:size(B,1),1:1000,:);
+
+figure, imshow(num_cart);
+figure, imshow(nome_cart);
