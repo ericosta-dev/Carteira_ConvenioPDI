@@ -86,8 +86,8 @@ nome_cart = B(200:size(B,1),1:1000,:);
 
 #################################TIRANDO OS RUIDOS PRETOS#######################################
 %binarizando%
-im2 = zeros(size(nome_cart,1),size(nome_cart,2));
-im2(nome_cart>120) = 1;
+im2 = zeros(size(num_cart,1),size(num_cart,2));
+im2(num_cart>120) = 1;
 %figure('Name','Imagem Binarizada')
 %imshow(im2, [0 1])
 
@@ -111,8 +111,8 @@ imshow(imErode2)
 
 im3 = zeros(size(num_cart,1),size(num_cart,2));
 im3(num_cart>120) = 1;
-%figure('Name','Imagem Binarizada')
-%imshow(im3, [0 1])
+figure('Name','Imagem Binarizada')
+imshow(im3, [0 1])
 
 EE = [0 0 0; 0 0 0; 0 0 0];
 imErode = im3;
@@ -130,6 +130,7 @@ end
 
 figure('Name','Imagem Erodida - SEM RUÍDOS PRETOS')
 imshow(imErode)
+imwrite(imErode,'I:/UFRN/Projeto PDI/Carteira_ConvenioPDI/Imagens_carteiras/num.jpg');
 
 % comparar recortes subtraindo as imagens
 % Atribuir o caractere a imagem subtraida
