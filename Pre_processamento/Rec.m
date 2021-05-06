@@ -30,14 +30,9 @@ endfor
 
 
 for i =1:size(numeros,2)
-  figure(i+1);
-  imshow(numeros(i).Image);
+  %figure(i+1);
+  %imshow(numeros(i).Image);
 end;
-
-a = numeros(1).Image
-
-imresize (a, [65 35]);
-figure, imshow(a)
 
 
 
@@ -56,17 +51,60 @@ b(10).Image = imread('I:/UFRN/Projeto PDI/Carteira_ConvenioPDI/Descritores/0.jpe
 
 
 for i=1:size(b,2)
- bin(i).Image = zeros(size(b(i).Image,1),size(b(i).Image,2));
- bin(i).Image(b(i).Image<120) = 1;
- figure,imshow(bin(i).Image);
- 
+ bw(i).Image = im2bw(b(i).Image)
+ %figure,imshow(bw(i).Image);
 end
 
-%b = bin(1).Image
+for i=1:size(b,2)
+ bw2(i).Image = !bw(i).Image;
+ status(i) = regionprops(bw2(i).Image,'Image','Area');
+ %figure, imshow(status(i).Image);
+end
 
-%c = a - b
-%d = b - a
+for i=1:size(b,2)
+  %figure('Image',i)
+  %imshow(status(i).Image);
+  status(i).("Valor") = i;
+  if i = 10
+    status(10).("Valor") = 0; 
+  end
+end
 
-%figure, imshow(c)
-%figure, imshow(d)
+%52 x 30 = 1560
+for k=1:size(numeros,2) %inicio for carteira
+  armazena_val = 1560;
+  for l =1:size(b,2) %inicio for banco
+    %Iniciando comparacao
+    analise = imresize( double(numeros(k).Image), [52 30]);
+    banco = imresize( double(status(l).Image),[52 30]);
+    comparacao =  analise - banco;
+    comparacaoBW = im2bw(comparacao);
+    %figure, imshow(comparacaoBW);
+    
+    %Contando as quantidadades de pixes brancos
+    qntUm = sum(sum(comparacaoBW));
+    
+  %se a quantidadade de Um's for menor que a armazenada
+    if (qntUm < armazena_val)
+      armazena_val = qntUm ;   %substitui a menor
+      valor = int2str(status(l).Valor)
+      imagem_numero = status(l).Image 
+      %figure, imshow(comparacaoBW);
+    end
+  end
+  saida(k).("Valor") =  valor;
+end
 
+disp("---------- RESULTADOS: ----------");
+disp("                                 ");
+for s=1:size(saida,2);
+  disp(strcat("Valor Numero_", num2str(s)," = ",num2str(saida(s).Valor) ))
+end;
+
+    %for i=1:size(comparacaoBW,1)
+    %  for j=1:size(comparacaoBW,2)
+    %    if (comparacaoBW(i,j) = 1)
+    %      qntUm = qntUm + 1;
+    %    end
+    %  end
+    %end
